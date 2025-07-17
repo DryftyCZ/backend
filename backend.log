@@ -1,0 +1,195 @@
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] -----------------------< com.kaiwaru:ticketing >------------------------
+[INFO] Building ticketing 1.0.0
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] >>> spring-boot:3.5.3:run (default-cli) > test-compile @ ticketing >>>
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ ticketing ---
+[INFO] Copying 1 resource from src/main/resources to target/classes
+[INFO] Copying 1 resource from src/main/resources to target/classes
+[INFO] 
+[INFO] --- compiler:3.14.0:compile (default-compile) @ ticketing ---
+[INFO] Recompiling the module because of changed source code.
+[INFO] Compiling 59 source files with javac [debug parameters release 21] to target/classes
+[INFO] /media/metin/nvm/ticket2/backend/kaiwaru/ticketing/src/main/java/com/kaiwaru/ticketing/service/LocationService.java: /media/metin/nvm/ticket2/backend/kaiwaru/ticketing/src/main/java/com/kaiwaru/ticketing/service/LocationService.java uses or overrides a deprecated API.
+[INFO] /media/metin/nvm/ticket2/backend/kaiwaru/ticketing/src/main/java/com/kaiwaru/ticketing/service/LocationService.java: Recompile with -Xlint:deprecation for details.
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ ticketing ---
+[INFO] skip non existing resourceDirectory /media/metin/nvm/ticket2/backend/kaiwaru/ticketing/src/test/resources
+[INFO] 
+[INFO] --- compiler:3.14.0:testCompile (default-testCompile) @ ticketing ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 2 source files with javac [debug parameters release 21] to target/test-classes
+[INFO] /media/metin/nvm/ticket2/backend/kaiwaru/ticketing/src/test/java/com/kaiwaru/ticketing/controller/TicketControllerTest.java: /media/metin/nvm/ticket2/backend/kaiwaru/ticketing/src/test/java/com/kaiwaru/ticketing/controller/TicketControllerTest.java uses or overrides a deprecated API.
+[INFO] /media/metin/nvm/ticket2/backend/kaiwaru/ticketing/src/test/java/com/kaiwaru/ticketing/controller/TicketControllerTest.java: Recompile with -Xlint:deprecation for details.
+[INFO] 
+[INFO] <<< spring-boot:3.5.3:run (default-cli) < test-compile @ ticketing <<<
+[INFO] 
+[INFO] 
+[INFO] --- spring-boot:3.5.3:run (default-cli) @ ticketing ---
+[INFO] Attaching agents: []
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.5.3)
+
+2025-07-17T22:26:21.683+02:00  INFO 36381 --- [  restartedMain] c.k.ticketing.TicketingApplication       : Starting TicketingApplication using Java 21.0.1 with PID 36381 (/media/metin/nvm/ticket2/backend/kaiwaru/ticketing/target/classes started by metin in /media/metin/nvm/ticket2/backend/kaiwaru/ticketing)
+2025-07-17T22:26:21.685+02:00  INFO 36381 --- [  restartedMain] c.k.ticketing.TicketingApplication       : No active profile set, falling back to 1 default profile: "default"
+2025-07-17T22:26:24.224+02:00  WARN 36381 --- [  restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-07-17T22:26:24.246+02:00  WARN 36381 --- [  restartedMain] r$InitializeUserDetailsManagerConfigurer : Found 2 UserDetailsService beans, with names [userDetailsServiceImpl, customUserDetailsService]. Global Authentication Manager will not use a UserDetailsService for username/password login. Consider publishing a single UserDetailsService bean.
+2025-07-17T22:26:24.246+02:00 DEBUG 36381 --- [  restartedMain] swordEncoderAuthenticationManagerBuilder : No authenticationProviders and no parentAuthenticationManager defined. Returning null.
+2025-07-17T22:26:24.530+02:00 DEBUG 36381 --- [  restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with filters: DisableEncodeUrlFilter, WebAsyncManagerIntegrationFilter, SecurityContextHolderFilter, HeaderWriterFilter, CorsFilter, LogoutFilter, AuthTokenFilter, RequestCacheAwareFilter, SecurityContextHolderAwareRequestFilter, AnonymousAuthenticationFilter, SessionManagementFilter, ExceptionTranslationFilter, AuthorizationFilter
+2025-07-17T22:26:24.714+02:00  INFO 36381 --- [  restartedMain] c.k.ticketing.TicketingApplication       : Started TicketingApplication in 3.248 seconds (process running for 3.445)
+2025-07-17T22:26:24.716+02:00  WARN 36381 --- [  restartedMain] c.k.t.configuration.DatabaseCleaner      : 🧹 Cleaning db data...
+2025-07-17T22:26:24.765+02:00  INFO 36381 --- [  restartedMain] c.k.t.configuration.DatabaseCleaner      : ✅ Db cleaned
+2025-07-17T22:26:24.791+02:00  INFO 36381 --- [  restartedMain] c.k.ticketing.configuration.DataLoader   : Created role: VISITOR
+2025-07-17T22:26:24.794+02:00  INFO 36381 --- [  restartedMain] c.k.ticketing.configuration.DataLoader   : Created role: WORKER
+2025-07-17T22:26:24.796+02:00  INFO 36381 --- [  restartedMain] c.k.ticketing.configuration.DataLoader   : Created role: ORGANIZER
+2025-07-17T22:26:24.798+02:00  INFO 36381 --- [  restartedMain] c.k.ticketing.configuration.DataLoader   : Created role: ADMIN
+2025-07-17T22:26:24.893+02:00  INFO 36381 --- [  restartedMain] c.k.ticketing.configuration.DataLoader   : Created default admin user: admin
+2025-07-17T22:26:24.893+02:00  INFO 36381 --- [  restartedMain] c.k.ticketing.configuration.DataLoader   : Please change the default password!
+2025-07-17T22:26:24.970+02:00  INFO 36381 --- [  restartedMain] c.k.ticketing.configuration.DataLoader   : Created dummy user: organizer with role: ORGANIZER
+2025-07-17T22:26:25.042+02:00  INFO 36381 --- [  restartedMain] c.k.ticketing.configuration.DataLoader   : Created dummy user: worker with role: WORKER
+2025-07-17T22:26:25.114+02:00  INFO 36381 --- [  restartedMain] c.k.ticketing.configuration.DataLoader   : Created dummy user: visitor with role: VISITOR
+2025-07-17T22:26:25.185+02:00  INFO 36381 --- [  restartedMain] c.k.ticketing.configuration.DataLoader   : Created dummy user: test with role: VISITOR
+2025-07-17T22:26:37.845+02:00  INFO 36381 --- [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2025-07-17T22:26:37.845+02:00 DEBUG 36381 --- [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Detected StandardServletMultipartResolver
+2025-07-17T22:26:37.845+02:00 DEBUG 36381 --- [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Detected AcceptHeaderLocaleResolver
+2025-07-17T22:26:37.845+02:00 DEBUG 36381 --- [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Detected FixedThemeResolver
+2025-07-17T22:26:37.846+02:00 DEBUG 36381 --- [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Detected org.springframework.web.servlet.view.DefaultRequestToViewNameTranslator@29a09936
+2025-07-17T22:26:37.846+02:00 DEBUG 36381 --- [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Detected org.springframework.web.servlet.support.SessionFlashMapManager@46eddae
+2025-07-17T22:26:37.847+02:00 DEBUG 36381 --- [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : enableLoggingRequestDetails='false': request parameters and headers will be masked to prevent unsafe logging of potentially sensitive data
+2025-07-17T22:26:37.847+02:00  INFO 36381 --- [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2025-07-17T22:26:37.856+02:00 DEBUG 36381 --- [nio-8080-exec-1] o.s.security.web.FilterChainProxy        : Securing OPTIONS /auth/signin
+2025-07-17T22:27:10.631+02:00 DEBUG 36381 --- [nio-8080-exec-3] o.s.security.web.FilterChainProxy        : Securing OPTIONS /auth/signin
+2025-07-17T22:27:10.634+02:00 DEBUG 36381 --- [nio-8080-exec-4] o.s.security.web.FilterChainProxy        : Securing POST /auth/signin
+2025-07-17T22:27:10.638+02:00 DEBUG 36381 --- [nio-8080-exec-4] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-07-17T22:27:10.640+02:00 DEBUG 36381 --- [nio-8080-exec-4] o.s.security.web.FilterChainProxy        : Secured POST /auth/signin
+2025-07-17T22:27:10.641+02:00 DEBUG 36381 --- [nio-8080-exec-4] o.s.web.servlet.DispatcherServlet        : POST "/api/auth/signin", parameters={}
+2025-07-17T22:27:10.834+02:00 DEBUG 36381 --- [nio-8080-exec-4] o.s.s.a.dao.DaoAuthenticationProvider    : Authenticated user
+2025-07-17T22:27:10.905+02:00 DEBUG 36381 --- [nio-8080-exec-4] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-07-17T22:27:11.017+02:00 DEBUG 36381 --- [nio-8080-exec-5] o.s.security.web.FilterChainProxy        : Securing OPTIONS /dashboard
+2025-07-17T22:27:11.022+02:00 DEBUG 36381 --- [nio-8080-exec-6] o.s.security.web.FilterChainProxy        : Securing GET /dashboard
+2025-07-17T22:27:11.048+02:00 DEBUG 36381 --- [nio-8080-exec-6] o.s.security.web.FilterChainProxy        : Secured GET /dashboard
+2025-07-17T22:27:11.048+02:00 DEBUG 36381 --- [nio-8080-exec-6] o.s.web.servlet.DispatcherServlet        : GET "/api/dashboard", parameters={}
+2025-07-17T22:27:11.049+02:00 DEBUG 36381 --- [nio-8080-exec-6] horizationManagerBeforeMethodInterceptor : Authorizing method invocation ReflectiveMethodInvocation: public org.springframework.http.ResponseEntity com.kaiwaru.ticketing.controller.DashboardController.getDashboard(); target is of class [com.kaiwaru.ticketing.controller.DashboardController]
+2025-07-17T22:27:11.068+02:00 DEBUG 36381 --- [nio-8080-exec-6] horizationManagerBeforeMethodInterceptor : Authorized method invocation ReflectiveMethodInvocation: public org.springframework.http.ResponseEntity com.kaiwaru.ticketing.controller.DashboardController.getDashboard(); target is of class [com.kaiwaru.ticketing.controller.DashboardController]
+2025-07-17T22:27:11.075+02:00 DEBUG 36381 --- [nio-8080-exec-6] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-07-17T22:33:33.386+02:00 DEBUG 36381 --- [nio-8080-exec-8] o.s.security.web.FilterChainProxy        : Securing POST /auth/signin
+2025-07-17T22:33:33.386+02:00 DEBUG 36381 --- [nio-8080-exec-8] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-07-17T22:33:33.387+02:00 DEBUG 36381 --- [nio-8080-exec-8] o.s.security.web.FilterChainProxy        : Secured POST /auth/signin
+2025-07-17T22:33:33.387+02:00 DEBUG 36381 --- [nio-8080-exec-8] o.s.web.servlet.DispatcherServlet        : POST "/api/auth/signin", parameters={}
+2025-07-17T22:33:33.458+02:00 DEBUG 36381 --- [nio-8080-exec-8] o.s.s.a.dao.DaoAuthenticationProvider    : Authenticated user
+2025-07-17T22:33:33.461+02:00 DEBUG 36381 --- [nio-8080-exec-8] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-07-17T22:33:33.490+02:00 DEBUG 36381 --- [nio-8080-exec-9] o.s.security.web.FilterChainProxy        : Securing GET /dashboard
+2025-07-17T22:33:33.494+02:00 DEBUG 36381 --- [nio-8080-exec-9] o.s.security.web.FilterChainProxy        : Secured GET /dashboard
+2025-07-17T22:33:33.494+02:00 DEBUG 36381 --- [nio-8080-exec-9] o.s.web.servlet.DispatcherServlet        : GET "/api/dashboard", parameters={}
+2025-07-17T22:33:33.494+02:00 DEBUG 36381 --- [nio-8080-exec-9] horizationManagerBeforeMethodInterceptor : Authorizing method invocation ReflectiveMethodInvocation: public org.springframework.http.ResponseEntity com.kaiwaru.ticketing.controller.DashboardController.getDashboard(); target is of class [com.kaiwaru.ticketing.controller.DashboardController]
+2025-07-17T22:33:33.495+02:00 DEBUG 36381 --- [nio-8080-exec-9] horizationManagerBeforeMethodInterceptor : Authorized method invocation ReflectiveMethodInvocation: public org.springframework.http.ResponseEntity com.kaiwaru.ticketing.controller.DashboardController.getDashboard(); target is of class [com.kaiwaru.ticketing.controller.DashboardController]
+2025-07-17T22:33:33.496+02:00 DEBUG 36381 --- [nio-8080-exec-9] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-07-17T22:46:25.929+02:00  WARN 36381 --- [       Thread-5] o.s.b.f.support.DisposableBeanAdapter    : Invocation of destroy method failed on bean with name 'inMemoryDatabaseShutdownExecutor': org.h2.jdbc.JdbcSQLNonTransientConnectionException: Database is already closed (to disable automatic closing at VM shutdown, add ";DB_CLOSE_ON_EXIT=FALSE" to the db URL) [90121-232]
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.5.3)
+
+2025-07-17T22:46:26.045+02:00  INFO 36381 --- [  restartedMain] c.k.ticketing.TicketingApplication       : Starting TicketingApplication using Java 21.0.1 with PID 36381 (started by metin in /media/metin/nvm/ticket2/backend/kaiwaru/ticketing)
+2025-07-17T22:46:26.045+02:00  INFO 36381 --- [  restartedMain] c.k.ticketing.TicketingApplication       : No active profile set, falling back to 1 default profile: "default"
+2025-07-17T22:46:26.169+02:00  INFO 36381 --- [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-07-17T22:46:26.170+02:00  INFO 36381 --- [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 0 ms. Found 0 JPA repository interfaces.
+2025-07-17T22:46:26.233+02:00  INFO 36381 --- [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-07-17T22:46:26.235+02:00  INFO 36381 --- [  restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-07-17T22:46:26.235+02:00  INFO 36381 --- [  restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.42]
+2025-07-17T22:46:26.242+02:00  INFO 36381 --- [  restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-07-17T22:46:26.243+02:00  INFO 36381 --- [  restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 197 ms
+2025-07-17T22:46:26.267+02:00  INFO 36381 --- [  restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Starting...
+2025-07-17T22:46:26.272+02:00  INFO 36381 --- [  restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-2 - Added connection conn10: url=jdbc:h2:mem:555f322c-eb20-4848-b874-30585d00f8e5 user=SA
+2025-07-17T22:46:26.273+02:00  INFO 36381 --- [  restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Start completed.
+2025-07-17T22:46:26.276+02:00  INFO 36381 --- [  restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-07-17T22:46:26.278+02:00  INFO 36381 --- [  restartedMain] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-07-17T22:46:26.283+02:00  INFO 36381 --- [  restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-07-17T22:46:26.295+02:00  INFO 36381 --- [  restartedMain] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-2)']
+	Database driver: undefined/unknown
+	Database version: 2.3.232
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-07-17T22:46:26.306+02:00  INFO 36381 --- [  restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-07-17T22:46:26.306+02:00  INFO 36381 --- [  restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-07-17T22:46:26.324+02:00  WARN 36381 --- [  restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-07-17T22:46:26.384+02:00  INFO 36381 --- [  restartedMain] o.s.b.a.h2.H2ConsoleAutoConfiguration    : H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:555f322c-eb20-4848-b874-30585d00f8e5'
+2025-07-17T22:46:26.449+02:00  INFO 36381 --- [  restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2025-07-17T22:46:26.455+02:00  INFO 36381 --- [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
+2025-07-17T22:46:26.457+02:00  INFO 36381 --- [  restartedMain] c.k.ticketing.TicketingApplication       : Started TicketingApplication in 0.426 seconds (process running for 1205.188)
+2025-07-17T22:46:26.459+02:00  INFO 36381 --- [  restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation delta:
+
+
+==========================
+CONDITION EVALUATION DELTA
+==========================
+
+
+Positive matches:
+-----------------
+
+   SpringBootWebSecurityConfiguration.SecurityFilterChainConfiguration matched:
+      - AllNestedConditions 2 matched 0 did not; NestedCondition on DefaultWebSecurityCondition.Beans @ConditionalOnMissingBean (types: org.springframework.security.web.SecurityFilterChain; SearchStrategy: all) did not find any beans; NestedCondition on DefaultWebSecurityCondition.Classes @ConditionalOnClass found required classes 'org.springframework.security.web.SecurityFilterChain', 'org.springframework.security.config.annotation.web.builders.HttpSecurity' (DefaultWebSecurityCondition)
+
+   SpringBootWebSecurityConfiguration.WebSecurityEnablerConfiguration matched:
+      - @ConditionalOnClass found required class 'org.springframework.security.config.annotation.web.configuration.EnableWebSecurity' (OnClassCondition)
+      - @ConditionalOnMissingBean (names: springSecurityFilterChain; SearchStrategy: all) did not find any beans (OnBeanCondition)
+
+
+Negative matches:
+-----------------
+
+   MailSenderAutoConfiguration:
+      Did not match:
+         - AnyNestedCondition 0 matched 2 did not; NestedCondition on MailSenderAutoConfiguration.MailSenderCondition.JndiNameProperty @ConditionalOnProperty (spring.mail.jndi-name) did not find property 'spring.mail.jndi-name'; NestedCondition on MailSenderAutoConfiguration.MailSenderCondition.HostProperty @ConditionalOnProperty (spring.mail.host) did not find property 'spring.mail.host' (MailSenderAutoConfiguration.MailSenderCondition)
+      Matched:
+         - @ConditionalOnClass found required classes 'jakarta.mail.internet.MimeMessage', 'jakarta.activation.MimeType', 'org.springframework.mail.MailSender' (OnClassCondition)
+
+   OAuth2ClientConfigurations.ClientRegistrationRepositoryConfiguration:
+      Did not match:
+         - OAuth2 Clients Configured Condition registered clients is not available (ClientsConfiguredCondition)
+
+   OAuth2ClientConfigurations.OAuth2AuthorizedClientServiceConfiguration:
+      Did not match:
+         - @ConditionalOnBean (types: org.springframework.security.oauth2.client.registration.ClientRegistrationRepository; SearchStrategy: all) did not find any beans of type org.springframework.security.oauth2.client.registration.ClientRegistrationRepository (OnBeanCondition)
+
+   OAuth2ClientWebSecurityAutoConfiguration:
+      Did not match:
+         - @ConditionalOnBean (types: org.springframework.security.oauth2.client.OAuth2AuthorizedClientService; SearchStrategy: all) did not find any beans of type org.springframework.security.oauth2.client.OAuth2AuthorizedClientService (OnBeanCondition)
+      Matched:
+         - @ConditionalOnClass found required classes 'org.springframework.security.config.annotation.web.configuration.EnableWebSecurity', 'org.springframework.security.oauth2.client.web.OAuth2AuthorizedClientRepository' (OnClassCondition)
+         - found 'session' scope (OnWebApplicationCondition)
+
+
+Exclusions:
+-----------
+
+    None
+
+
+Unconditional classes:
+----------------------
+
+    None
+
+
+
