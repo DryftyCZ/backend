@@ -14,17 +14,24 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.kaiwaru.ticketing.dto.EventCreateRequest;
 import com.kaiwaru.ticketing.model.Event;
+import com.kaiwaru.ticketing.model.TicketType;
 import com.kaiwaru.ticketing.service.EventService;
+import com.kaiwaru.ticketing.service.TicketTypeService;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/events")
 public class EventController {
 
     private final EventService eventService;
+    private final TicketTypeService ticketTypeService;
 
-    public EventController(EventService eventService) {
+    public EventController(EventService eventService, TicketTypeService ticketTypeService) {
         this.eventService = eventService;
+        this.ticketTypeService = ticketTypeService;
     }
 
     @GetMapping
@@ -42,14 +49,21 @@ public class EventController {
 
     @PostMapping
     @PreAuthorize("hasRole('ORGANIZER') or hasRole('ADMIN')")
-    public ResponseEntity<?> createEvent(@RequestBody Event event) {
+    public ResponseEntity<?> createEvent(@Valid @RequestBody EventCreateRequest request) {
         try {
-            Event created = eventService.createEvent(event);
+            Event created = eventService.createEventWithTicketTypes(request);
             URI location = URI.create("/api/events/" + created.getId());
             return ResponseEntity.created(location).body(created);
         } catch (IllegalArgumentException ex) {
             return ResponseEntity.badRequest().body(ex.getMessage());
         }
+    }
+
+    @GetMapping("/{id}/ticket-types")
+    @PreAuthorize("hasRole('ORGANIZER') or hasRole('ADMIN')")
+    public ResponseEntity<List<TicketType>> getEventTicketTypes(@PathVariable Long id) {
+        List<TicketType> ticketTypes = ticketTypeService.getTicketTypesByEventId(id);
+        return ResponseEntity.ok(ticketTypes);
     }
 
     @PutMapping("/{id}")

@@ -13,6 +13,8 @@ import com.kaiwaru.ticketing.model.Event;
 import com.kaiwaru.ticketing.model.Ticket;
 import com.kaiwaru.ticketing.repository.TicketRepository;
 
+import jakarta.servlet.http.HttpServletRequest;
+
 @Service
 public class TicketService {
 
@@ -24,6 +26,9 @@ public class TicketService {
     
     @Autowired
     private EmailService emailService;
+    
+    @Autowired
+    private TicketPurchaseTrackingService ticketPurchaseTrackingService;
 
    @Transactional
     public List<Ticket> generateTicketsForEvent(Event event, int count) {
@@ -55,6 +60,33 @@ public class TicketService {
         ticket.setIpAddress(ipAddress);
 
         ticket = ticketRepository.save(ticket);
+
+        try {
+            String qrCodeImage = qrCodeService.generateQRCode(ticket.getQrCode());
+            //emailService.sendTicketEmail(ticket, qrCodeImage);
+        } catch (Exception e) {
+            throw new RuntimeException("Chyba při generování nebo odeslání QR kódu: " + e.getMessage(), e);
+        }
+
+        return ticket;
+    }
+    
+    @Transactional
+    public Ticket purchaseTicket(Event event, String customerName, String customerEmail, HttpServletRequest request) {
+        Optional<Ticket> availableTicketOpt = ticketRepository.findFirstByEventAndCustomerEmailIsNull(event);
+        if (availableTicketOpt.isEmpty()) {
+            throw new RuntimeException("Žádné dostupné vstupenky pro tuto akci");
+        }
+
+        Ticket ticket = availableTicketOpt.get();
+        ticket.setCustomerName(customerName);
+        ticket.setCustomerEmail(customerEmail);
+        ticket.setPurchaseDate(LocalDateTime.now());
+
+        ticket = ticketRepository.save(ticket);
+        
+        // Track the purchase with visitor IP and city information
+        ticketPurchaseTrackingService.trackTicketPurchase(ticket, request);
 
         try {
             String qrCodeImage = qrCodeService.generateQRCode(ticket.getQrCode());

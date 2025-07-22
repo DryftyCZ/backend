@@ -38,7 +38,8 @@ def create_event(token):
     event_date = (datetime.now() + timedelta(days=1)).date()  # LocalDate (bez času)
     data = {
         "name": f"Test Event {random_name()}",
-        "location": "Ostrava, CZ",
+        "address": "Nová Karolina, Jantarová 4",
+        "city": "Ostrava",
         "date": event_date.isoformat()
     }
     r = requests.post(EVENTS_URL, json=data, headers=headers)

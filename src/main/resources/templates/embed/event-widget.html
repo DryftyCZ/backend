@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="'Lístky na ' + ${event.name}">Lístky</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .widget-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+        
+        .event-header {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 24px;
+            text-align: center;
+        }
+        
+        .event-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        
+        .event-details {
+            opacity: 0.9;
+            font-size: 14px;
+        }
+        
+        .tickets-section {
+            padding: 24px;
+        }
+        
+        .ticket-type {
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 16px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .ticket-type:hover {
+            border-color: #667eea;
+            background: #f8f9ff;
+        }
+        
+        .ticket-type.selected {
+            border-color: #667eea;
+            background: #f8f9ff;
+        }
+        
+        .ticket-name {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        
+        .ticket-price {
+            font-size: 20px;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 8px;
+        }
+        
+        .ticket-description {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+        
+        .ticket-availability {
+            font-size: 12px;
+            color: #28a745;
+            font-weight: 500;
+        }
+        
+        .quantity-selector {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 12px;
+        }
+        
+        .quantity-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 700;
+        }
+        
+        .quantity-btn:hover {
+            background: #5a6fd8;
+        }
+        
+        .quantity-display {
+            font-size: 16px;
+            font-weight: 600;
+            min-width: 20px;
+            text-align: center;
+        }
+        
+        .buy-button {
+            width: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 16px 24px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 24px;
+            transition: all 0.3s ease;
+        }
+        
+        .buy-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+        
+        .buy-button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .total-section {
+            background: #f8f9fa;
+            padding: 16px 24px;
+            border-top: 1px solid #e9ecef;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .total-label {
+            font-size: 16px;
+            font-weight: 600;
+        }
+        
+        .total-price {
+            font-size: 20px;
+            font-weight: 700;
+            color: #667eea;
+        }
+    </style>
+</head>
+<body>
+    <div class="widget-container">
+        <div class="event-header">
+            <h1 class="event-title" th:text="${event.name}">Název akce</h1>
+            <div class="event-details">
+                <span th:text="${event.date}">Datum</span> • 
+                <span th:text="${event.city}">Město</span>
+            </div>
+        </div>
+        
+        <div class="tickets-section">
+            <div th:each="ticketType : ${event.ticketTypes}" class="ticket-type" th:attr="data-type-id=${ticketType.id}">
+                <div class="ticket-name" th:text="${ticketType.name}">Standard</div>
+                <div class="ticket-price" th:text="'CZK ' + ${ticketType.price}">CZK 500</div>
+                <div class="ticket-description" th:text="${ticketType.description}">Standardní vstup</div>
+                <div class="ticket-availability" th:text="'Dostupné: ' + ${ticketType.availableQuantity} + ' ks'">Dostupné: 100 ks</div>
+                
+                <div class="quantity-selector">
+                    <button class="quantity-btn" onclick="changeQuantity(this, -1)">−</button>
+                    <span class="quantity-display">0</span>
+                    <button class="quantity-btn" onclick="changeQuantity(this, 1)">+</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="total-section">
+            <span class="total-label">Celkem:</span>
+            <span class="total-price" id="total-price">CZK 0</span>
+        </div>
+        
+        <div style="padding: 0 24px 24px;">
+            <button class="buy-button" onclick="buyTickets()">Koupit lístky</button>
+        </div>
+    </div>
+
+    <script th:inline="javascript">
+        // Předané proměnné z Thymeleaf
+        const eventId = [[${eventId}]];
+        const customerId = [[${customerId}]];
+        const sessionId = [[${sessionId}]];
+        
+        let selectedTickets = {};
+        let totalPrice = 0;
+
+        // Tracking při načtení
+        window.addEventListener('load', function() {
+            trackVisit();
+        });
+
+        function trackVisit() {
+            fetch('/embed/api/track-visit', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    eventId: eventId,
+                    customerId: customerId,
+                    sessionId: sessionId,
+                    referrer: document.referrer
+                })
+            }).catch(err => console.log('Tracking error:', err));
+        }
+
+        function changeQuantity(button, change) {
+            const ticketType = button.closest('.ticket-type');
+            const typeId = ticketType.getAttribute('data-type-id');
+            const quantityDisplay = ticketType.querySelector('.quantity-display');
+            const currentQuantity = parseInt(quantityDisplay.textContent) || 0;
+            const newQuantity = Math.max(0, currentQuantity + change);
+            
+            quantityDisplay.textContent = newQuantity;
+            
+            if (newQuantity > 0) {
+                ticketType.classList.add('selected');
+                const price = parseFloat(ticketType.querySelector('.ticket-price').textContent.replace('CZK ', '').replace(' ', ''));
+                selectedTickets[typeId] = {
+                    quantity: newQuantity,
+                    price: price,
+                    name: ticketType.querySelector('.ticket-name').textContent
+                };
+            } else {
+                ticketType.classList.remove('selected');
+                delete selectedTickets[typeId];
+            }
+            
+            updateTotal();
+        }
+
+        function updateTotal() {
+            totalPrice = 0;
+            Object.values(selectedTickets).forEach(ticket => {
+                totalPrice += ticket.quantity * ticket.price;
+            });
+            
+            document.getElementById('total-price').textContent = 'CZK ' + totalPrice.toLocaleString('cs-CZ');
+        }
+
+        function buyTickets() {
+            if (Object.keys(selectedTickets).length === 0) {
+                alert('Vyberte prosím alespoň jeden lístek');
+                return;
+            }
+
+            // Simulace nákupu - zde byste volali vaše API
+            const purchaseData = {
+                eventId: eventId,
+                customerId: customerId,
+                sessionId: sessionId,
+                tickets: selectedTickets,
+                totalPrice: totalPrice
+            };
+
+            // Track konverzi
+            fetch('/embed/api/track-conversion', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    sessionId: sessionId,
+                    eventId: eventId,
+                    totalPrice: totalPrice
+                })
+            });
+
+            // Zde byste přesměrovali na platební bránu nebo zobrazili formulář
+            alert('Přesměrování na platbu...\nCelkem: CZK ' + totalPrice.toLocaleString('cs-CZ'));
+            
+            console.log('Purchase data:', purchaseData);
+        }
+    </script>
+</body>
+</html>

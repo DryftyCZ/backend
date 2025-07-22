@@ -49,6 +49,10 @@ public class Ticket {
 
     @ManyToOne(optional = true)
     @JsonIgnore
+    private TicketType ticketType;
+
+    @ManyToOne(optional = true)
+    @JsonIgnore
     private User customer;
 
     @Column(nullable = true)

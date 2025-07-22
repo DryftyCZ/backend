@@ -62,7 +62,7 @@ public class EmailService {
             ticket.getTicketNumber(),
             ticket.getEvent().getName(),
             ticket.getEvent().getDate(),
-            ticket.getEvent().getLocation(),
+            ticket.getEvent().getAddress() + ", " + ticket.getEvent().getCity(),
             ticket.getCustomerName(),
             ticket.getCustomerEmail(),
             qrCodeImage

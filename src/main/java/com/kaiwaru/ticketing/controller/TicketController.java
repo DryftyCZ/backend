@@ -23,6 +23,12 @@ import com.kaiwaru.ticketing.model.Ticket;
 import com.kaiwaru.ticketing.repository.EventRepository;
 import com.kaiwaru.ticketing.repository.TicketRepository;
 import com.kaiwaru.ticketing.service.TicketService;
+import com.kaiwaru.ticketing.service.EventService;
+import com.kaiwaru.ticketing.model.Auth.User;
+import com.kaiwaru.ticketing.security.UserPrincipal;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import com.kaiwaru.ticketing.repository.UserRepository;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
@@ -41,11 +47,28 @@ public class TicketController {
 
     @Autowired
     private EventRepository eventRepository;
+    
+    @Autowired
+    private EventService eventService;
+    
+    @Autowired
+    private UserRepository userRepository;
 
     @GetMapping("/")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('ORGANIZER')")
     public List<Ticket> getAllTickets() {
-        return ticketRepository.findAll();
+        User currentUser = getCurrentUser();
+        
+        // Admins see all tickets
+        if (isAdmin(currentUser)) {
+            return ticketRepository.findAll();
+        }
+        
+        // Organizers see only tickets from their events
+        List<Event> userEvents = eventRepository.findByOrganizer(currentUser);
+        return userEvents.stream()
+                .flatMap(event -> ticketRepository.findByEvent(event).stream())
+                .collect(Collectors.toList());
     }
 
     // Validace tiketu pomocí qrCode v parametru, označí jako použitý
@@ -72,8 +95,8 @@ public class TicketController {
     @PreAuthorize("hasRole('ORGANIZER') or hasRole('ADMIN')")
     public ResponseEntity<?> generateTickets(@RequestBody @Valid GenerateTicketsRequest request) {
         try {
-            Event event = eventRepository.findById(request.getEventId())
-                .orElseThrow(() -> new IllegalArgumentException("Event s ID " + request.getEventId() + " nebyl nalezen"));
+            // Use EventService which checks permissions
+            Event event = eventService.getEventById(request.getEventId());
 
             List<Ticket> tickets = ticketService.generateTicketsForEvent(event, request.getCount());
 
@@ -94,14 +117,8 @@ public class TicketController {
                     .orElseThrow(() -> new IllegalArgumentException(
                             "Event s ID " + request.getEventId() + " nebyl nalezen"));
 
-            String ip = httpRequest.getHeader("X-Forwarded-For");
-            if (ip == null || ip.isEmpty() || "unknown".equalsIgnoreCase(ip)) {
-                ip = httpRequest.getRemoteAddr();
-            } else {
-                // X-Forwarded-For může obsahovat i víc IP, vezmi první
-                ip = ip.split(",")[0].trim();
-            }
-            Ticket ticket = ticketService.purchaseTicket(event, request.getCustomerName(), request.getCustomerEmail(), ip);
+            // Use the new overloaded method that handles visitor tracking
+            Ticket ticket = ticketService.purchaseTicket(event, request.getCustomerName(), request.getCustomerEmail(), httpRequest);
 
             return ResponseEntity.ok(Map.of(
                 "message", "Vstupenka byla úspěšně zakoupena",
@@ -117,8 +134,8 @@ public class TicketController {
     @PreAuthorize("hasRole('ORGANIZER') or hasRole('ADMIN')")
     public ResponseEntity<?> getEventTickets(@PathVariable Long eventId) {
         try {
-            Event event = eventRepository.findById(eventId)
-                    .orElseThrow(() -> new IllegalArgumentException("Event s ID " + eventId + " nebyl nalezen"));
+            // Use EventService which checks permissions
+            Event event = eventService.getEventById(eventId);
 
             List<Ticket> tickets = ticketService.getTicketsByEvent(event);
 
@@ -131,7 +148,20 @@ public class TicketController {
     @GetMapping("/stats/countries")
     @PreAuthorize("hasRole('ORGANIZER') or hasRole('ADMIN')")
     public Map<String, Long> statsByCountry() {
-        return ticketRepository.findAll().stream()
+        User currentUser = getCurrentUser();
+        List<Ticket> tickets;
+        
+        if (isAdmin(currentUser)) {
+            tickets = ticketRepository.findAll();
+        } else {
+            // Get only tickets from organizer's events
+            List<Event> userEvents = eventRepository.findByOrganizer(currentUser);
+            tickets = userEvents.stream()
+                    .flatMap(event -> ticketRepository.findByEvent(event).stream())
+                    .collect(Collectors.toList());
+        }
+        
+        return tickets.stream()
                 .filter(t -> t.getCountry() != null)
                 .collect(Collectors.groupingBy(Ticket::getCountry, Collectors.counting()));
     }
@@ -139,11 +169,39 @@ public class TicketController {
     @GetMapping("/stats/cities")
     @PreAuthorize("hasRole('ORGANIZER') or hasRole('ADMIN')")
     public Map<String, Long> statsByCity() {
-        return ticketRepository.findAll().stream()
+        User currentUser = getCurrentUser();
+        List<Ticket> tickets;
+        
+        if (isAdmin(currentUser)) {
+            tickets = ticketRepository.findAll();
+        } else {
+            // Get only tickets from organizer's events
+            List<Event> userEvents = eventRepository.findByOrganizer(currentUser);
+            tickets = userEvents.stream()
+                    .flatMap(event -> ticketRepository.findByEvent(event).stream())
+                    .collect(Collectors.toList());
+        }
+        
+        return tickets.stream()
             .filter(t -> t.getCity() != null && !t.getCity().isBlank())
             .collect(Collectors.groupingBy(
                 t -> t.getCity().trim(),
                 Collectors.counting()
             ));
+    }
+    
+    private User getCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.getPrincipal() instanceof UserPrincipal) {
+            UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+            return userRepository.findById(userPrincipal.getId())
+                    .orElseThrow(() -> new RuntimeException("Uživatel nebyl nalezen"));
+        }
+        throw new RuntimeException("Uživatel není přihlášen");
+    }
+    
+    private boolean isAdmin(User user) {
+        return user.getRoles().stream()
+                .anyMatch(role -> role.getName().equals("ADMIN"));
     }
 }
