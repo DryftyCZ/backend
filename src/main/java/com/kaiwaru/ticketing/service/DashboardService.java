@@ -15,6 +15,7 @@ import com.kaiwaru.ticketing.model.Ticket;
 import com.kaiwaru.ticketing.model.TicketType;
 import com.kaiwaru.ticketing.service.GeolocationService;
 import com.kaiwaru.ticketing.service.OrganizerCommissionService;
+import com.kaiwaru.ticketing.service.CurrencyFormatService;
 import com.kaiwaru.ticketing.model.Auth.User;
 import com.kaiwaru.ticketing.security.UserPrincipal;
 import com.kaiwaru.ticketing.exception.EntityNotFoundException;
@@ -55,6 +56,9 @@ public class DashboardService {
     
     @Autowired
     private OrganizerCommissionService commissionService;
+    
+    @Autowired
+    private CurrencyFormatService currencyFormatService;
 
     public DashboardStatsDto getDashboardStats(String startDateStr, String endDateStr) {
         DashboardStatsDto stats = new DashboardStatsDto();
@@ -937,6 +941,6 @@ public class DashboardService {
     }
     
     private String formatCurrency(BigDecimal amount) {
-        return amount.toString() + " Kč";
+        return currencyFormatService.formatCurrency(amount);
     }
 }

@@ -51,7 +51,7 @@ public class DashboardController {
                 .orElseThrow(() -> new RuntimeException("User not found"));
         
         Map<String, Object> dashboardData = new HashMap<>();
-        dashboardData.put("welcome", "Welcome to SmartTicket Dashboard!");
+        dashboardData.put("welcome", "Welcome to SmartTickets Dashboard!");
         dashboardData.put("user", Map.of(
             "id", user.getId(),
             "username", user.getUsername(),
@@ -82,8 +82,9 @@ public class DashboardController {
     
     @GetMapping("/realtime/recent")
     @PreAuthorize("hasRole('ADMIN') or hasRole('ORGANIZER') or hasRole('WORKER')")
-    public ResponseEntity<java.util.List<RealTimeStats>> getRecentRealTimeStats() {
-        java.util.List<RealTimeStats> stats = realTimeStatsService.getRecentStats(30);
+    public ResponseEntity<java.util.List<RealTimeStats>> getRecentRealTimeStats(
+            @RequestParam(value = "limit", defaultValue = "30") int limit) {
+        java.util.List<RealTimeStats> stats = realTimeStatsService.getRecentStats(limit);
         return ResponseEntity.ok(stats);
     }
     

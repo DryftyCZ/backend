@@ -11,7 +11,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.kaiwaru.ticketing.model.Event;
 import com.kaiwaru.ticketing.model.Ticket;
+import com.kaiwaru.ticketing.model.TicketType;
+import com.kaiwaru.ticketing.model.Auth.User;
 import com.kaiwaru.ticketing.repository.TicketRepository;
+import com.kaiwaru.ticketing.repository.TicketTypeRepository;
+import com.kaiwaru.ticketing.repository.UserRepository;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -29,6 +33,12 @@ public class TicketService {
     
     @Autowired
     private TicketPurchaseTrackingService ticketPurchaseTrackingService;
+    
+    @Autowired
+    private TicketTypeRepository ticketTypeRepository;
+    
+    @Autowired
+    private UserRepository userRepository;
 
    @Transactional
     public List<Ticket> generateTicketsForEvent(Event event, int count) {
@@ -119,6 +129,62 @@ public class TicketService {
 
     public List<Ticket> getTicketsByEvent(Event event) {
         return ticketRepository.findByEvent(event);
+    }
+    
+    /**
+     * Purchase tickets for a specific ticket type
+     * This creates new tickets on demand and associates them with the ticket type
+     */
+    @Transactional
+    public List<Ticket> purchaseTicketsWithType(Long ticketTypeId, String customerName, String customerEmail, 
+                                                 Integer quantity, HttpServletRequest request, User customer) {
+        // Find the ticket type
+        TicketType ticketType = ticketTypeRepository.findById(ticketTypeId)
+                .orElseThrow(() -> new RuntimeException("Typ vstupenky nebyl nalezen"));
+        
+        // Check availability
+        if (ticketType.getAvailableQuantity() < quantity) {
+            throw new RuntimeException("Nedostatek dostupných vstupenek. Zbývá pouze: " + ticketType.getAvailableQuantity());
+        }
+        
+        List<Ticket> purchasedTickets = new ArrayList<>();
+        
+        // Create tickets for this purchase
+        for (int i = 0; i < quantity; i++) {
+            Ticket ticket = new Ticket();
+            ticket.setEvent(ticketType.getEvent());
+            ticket.setTicketType(ticketType);
+            ticket.setQrCode(qrCodeService.generateUniqueTicketCode());
+            ticket.setTicketNumber(qrCodeService.generateTicketNumber());
+            ticket.setCustomerName(customerName);
+            ticket.setCustomerEmail(customerEmail);
+            ticket.setCustomer(customer);
+            ticket.setPurchaseDate(LocalDateTime.now());
+            ticket.setUsed(false);
+            
+            ticket = ticketRepository.save(ticket);
+            purchasedTickets.add(ticket);
+            
+            // Track the purchase
+            ticketPurchaseTrackingService.trackTicketPurchase(ticket, request);
+        }
+        
+        // Update available quantity
+        ticketType.setAvailableQuantity(ticketType.getAvailableQuantity() - quantity);
+        ticketTypeRepository.save(ticketType);
+        
+        // Send emails
+        try {
+            for (Ticket ticket : purchasedTickets) {
+                String qrCodeImage = qrCodeService.generateQRCode(ticket.getQrCode());
+                //emailService.sendTicketEmail(ticket, qrCodeImage);
+            }
+        } catch (Exception e) {
+            // Log error but don't fail the purchase
+            System.err.println("Error sending ticket emails: " + e.getMessage());
+        }
+        
+        return purchasedTickets;
     }
 }
 

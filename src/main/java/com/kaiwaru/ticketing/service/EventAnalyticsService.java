@@ -508,8 +508,8 @@ public class EventAnalyticsService {
         List<DailyRevenueDto> dailyRevenue = new ArrayList<>();
         List<DailyTicketSalesDto> dailyTicketSales = new ArrayList<>();
         
-        // Get last 30 days
-        LocalDate chartStartDate = LocalDate.now().minusDays(30);
+        // Get last 30 days including today
+        LocalDate chartStartDate = LocalDate.now().minusDays(29);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         
         for (int i = 0; i < 30; i++) {

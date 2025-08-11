@@ -13,10 +13,15 @@
 /home/ondrej/Documents/ticketing/backend/src/main/java/com/kaiwaru/ticketing/controller/GlobalExceptionHandler.java
 /home/ondrej/Documents/ticketing/backend/src/main/java/com/kaiwaru/ticketing/controller/InviteController.java
 /home/ondrej/Documents/ticketing/backend/src/main/java/com/kaiwaru/ticketing/controller/OrganizerManagementController.java
+/home/ondrej/Documents/ticketing/backend/src/main/java/com/kaiwaru/ticketing/controller/PublicTicketController.java
+/home/ondrej/Documents/ticketing/backend/src/main/java/com/kaiwaru/ticketing/controller/SettingsController.java
 /home/ondrej/Documents/ticketing/backend/src/main/java/com/kaiwaru/ticketing/controller/TestController.java
 /home/ondrej/Documents/ticketing/backend/src/main/java/com/kaiwaru/ticketing/controller/TicketController.java
+/home/ondrej/Documents/ticketing/backend/src/main/java/com/kaiwaru/ticketing/controller/TicketValidationController.java
 /home/ondrej/Documents/ticketing/backend/src/main/java/com/kaiwaru/ticketing/controller/TrackingController.java
+/home/ondrej/Documents/ticketing/backend/src/main/java/com/kaiwaru/ticketing/controller/UserController.java
 /home/ondrej/Documents/ticketing/backend/src/main/java/com/kaiwaru/ticketing/controller/VenueController.java
+/home/ondrej/Documents/ticketing/backend/src/main/java/com/kaiwaru/ticketing/dto/ChangePasswordRequest.java
 /home/ondrej/Documents/ticketing/backend/src/main/java/com/kaiwaru/ticketing/dto/DashboardStatsDto.java
 /home/ondrej/Documents/ticketing/backend/src/main/java/com/kaiwaru/ticketing/dto/EventAnalyticsDto.java
 /home/ondrej/Documents/ticketing/backend/src/main/java/com/kaiwaru/ticketing/dto/EventCreateRequest.java
@@ -24,11 +29,14 @@
 /home/ondrej/Documents/ticketing/backend/src/main/java/com/kaiwaru/ticketing/dto/GeolocationResponse.java
 /home/ondrej/Documents/ticketing/backend/src/main/java/com/kaiwaru/ticketing/dto/LocationSuggestion.java
 /home/ondrej/Documents/ticketing/backend/src/main/java/com/kaiwaru/ticketing/dto/NextMonthCashFlowDto.java
+/home/ondrej/Documents/ticketing/backend/src/main/java/com/kaiwaru/ticketing/dto/OrganizationSettingsDto.java
 /home/ondrej/Documents/ticketing/backend/src/main/java/com/kaiwaru/ticketing/dto/OrganizerCommissionDto.java
 /home/ondrej/Documents/ticketing/backend/src/main/java/com/kaiwaru/ticketing/dto/PurchaseTicketRequest.java
 /home/ondrej/Documents/ticketing/backend/src/main/java/com/kaiwaru/ticketing/dto/RealTimeStatsDto.java
 /home/ondrej/Documents/ticketing/backend/src/main/java/com/kaiwaru/ticketing/dto/TodayAgendaDto.java
 /home/ondrej/Documents/ticketing/backend/src/main/java/com/kaiwaru/ticketing/dto/UpdateCommissionRequest.java
+/home/ondrej/Documents/ticketing/backend/src/main/java/com/kaiwaru/ticketing/dto/UpdateProfileRequest.java
+/home/ondrej/Documents/ticketing/backend/src/main/java/com/kaiwaru/ticketing/dto/UserProfileDto.java
 /home/ondrej/Documents/ticketing/backend/src/main/java/com/kaiwaru/ticketing/dto/ValidateTicketRequest.java
 /home/ondrej/Documents/ticketing/backend/src/main/java/com/kaiwaru/ticketing/exception/EntityNotFoundException.java
 /home/ondrej/Documents/ticketing/backend/src/main/java/com/kaiwaru/ticketing/exception/InvalidInviteTokenException.java
@@ -45,6 +53,7 @@
 /home/ondrej/Documents/ticketing/backend/src/main/java/com/kaiwaru/ticketing/model/EmbedVisit.java
 /home/ondrej/Documents/ticketing/backend/src/main/java/com/kaiwaru/ticketing/model/Event.java
 /home/ondrej/Documents/ticketing/backend/src/main/java/com/kaiwaru/ticketing/model/IpProcessingQueue.java
+/home/ondrej/Documents/ticketing/backend/src/main/java/com/kaiwaru/ticketing/model/OrganizationSettings.java
 /home/ondrej/Documents/ticketing/backend/src/main/java/com/kaiwaru/ticketing/model/OrganizerCommission.java
 /home/ondrej/Documents/ticketing/backend/src/main/java/com/kaiwaru/ticketing/model/RealTimeStats.java
 /home/ondrej/Documents/ticketing/backend/src/main/java/com/kaiwaru/ticketing/model/Ticket.java
@@ -57,6 +66,7 @@
 /home/ondrej/Documents/ticketing/backend/src/main/java/com/kaiwaru/ticketing/repository/InvitationRepository.java
 /home/ondrej/Documents/ticketing/backend/src/main/java/com/kaiwaru/ticketing/repository/InviteTokenRepository.java
 /home/ondrej/Documents/ticketing/backend/src/main/java/com/kaiwaru/ticketing/repository/IpProcessingQueueRepository.java
+/home/ondrej/Documents/ticketing/backend/src/main/java/com/kaiwaru/ticketing/repository/OrganizationSettingsRepository.java
 /home/ondrej/Documents/ticketing/backend/src/main/java/com/kaiwaru/ticketing/repository/OrganizerCommissionRepository.java
 /home/ondrej/Documents/ticketing/backend/src/main/java/com/kaiwaru/ticketing/repository/RealTimeStatsRepository.java
 /home/ondrej/Documents/ticketing/backend/src/main/java/com/kaiwaru/ticketing/repository/RefreshTokenRepository.java
@@ -86,6 +96,7 @@
 /home/ondrej/Documents/ticketing/backend/src/main/java/com/kaiwaru/ticketing/security/service/RefreshTokenService.java
 /home/ondrej/Documents/ticketing/backend/src/main/java/com/kaiwaru/ticketing/security/utils/JwtUtils.java
 /home/ondrej/Documents/ticketing/backend/src/main/java/com/kaiwaru/ticketing/service/CityService.java
+/home/ondrej/Documents/ticketing/backend/src/main/java/com/kaiwaru/ticketing/service/CurrencyFormatService.java
 /home/ondrej/Documents/ticketing/backend/src/main/java/com/kaiwaru/ticketing/service/DashboardService.java
 /home/ondrej/Documents/ticketing/backend/src/main/java/com/kaiwaru/ticketing/service/EmailService.java
 /home/ondrej/Documents/ticketing/backend/src/main/java/com/kaiwaru/ticketing/service/EventAnalyticsService.java

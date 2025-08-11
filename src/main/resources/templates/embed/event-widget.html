@@ -269,38 +269,79 @@
             document.getElementById('total-price').textContent = 'CZK ' + totalPrice.toLocaleString('cs-CZ');
         }
 
-        function buyTickets() {
+        async function buyTickets() {
             if (Object.keys(selectedTickets).length === 0) {
                 alert('Vyberte prosím alespoň jeden lístek');
                 return;
             }
 
-            // Simulace nákupu - zde byste volali vaše API
-            const purchaseData = {
-                eventId: eventId,
-                customerId: customerId,
-                sessionId: sessionId,
-                tickets: selectedTickets,
-                totalPrice: totalPrice
-            };
-
-            // Track konverzi
-            fetch('/embed/api/track-conversion', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    sessionId: sessionId,
-                    eventId: eventId,
-                    totalPrice: totalPrice
-                })
-            });
-
-            // Zde byste přesměrovali na platební bránu nebo zobrazili formulář
-            alert('Přesměrování na platbu...\nCelkem: CZK ' + totalPrice.toLocaleString('cs-CZ'));
+            // Show purchase form
+            const customerName = prompt('Zadejte vaše jméno:');
+            if (!customerName) return;
             
-            console.log('Purchase data:', purchaseData);
+            const customerEmail = prompt('Zadejte váš email:');
+            if (!customerEmail) return;
+
+            // Process each ticket type separately
+            try {
+                let allPurchasedTickets = [];
+                
+                for (const [ticketTypeId, ticketInfo] of Object.entries(selectedTickets)) {
+                    const purchaseRequest = {
+                        eventId: eventId,
+                        ticketTypeId: parseInt(ticketTypeId),
+                        customerName: customerName,
+                        customerEmail: customerEmail,
+                        quantity: ticketInfo.quantity
+                    };
+
+                    const response = await fetch('/api/public/tickets/purchase', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(purchaseRequest)
+                    });
+
+                    if (!response.ok) {
+                        const error = await response.json();
+                        throw new Error(error.error || 'Chyba při nákupu vstupenek');
+                    }
+
+                    const result = await response.json();
+                    allPurchasedTickets.push(...result.tickets);
+                }
+
+                // Track conversion
+                fetch('/embed/api/track-conversion', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        sessionId: sessionId,
+                        eventId: eventId,
+                        totalPrice: totalPrice
+                    })
+                });
+
+                alert(`Úspěšně zakoupeno ${allPurchasedTickets.length} vstupenek!\nCelkem: CZK ${totalPrice.toLocaleString('cs-CZ')}\n\nPotvrzení bylo odesláno na email: ${customerEmail}`);
+                
+                // Reset the form
+                Object.keys(selectedTickets).forEach(typeId => {
+                    const ticketType = document.querySelector(`[data-type-id="${typeId}"]`);
+                    if (ticketType) {
+                        ticketType.querySelector('.quantity-display').textContent = '0';
+                        ticketType.classList.remove('selected');
+                    }
+                });
+                selectedTickets = {};
+                updateTotal();
+                
+            } catch (error) {
+                alert('Chyba: ' + error.message);
+                console.error('Purchase error:', error);
+            }
         }
     </script>
 </body>

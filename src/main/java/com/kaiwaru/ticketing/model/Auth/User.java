@@ -55,4 +55,20 @@ public class User {
 
     private String provider;
     private String providerId;
+    
+    // Profile fields
+    private String firstName;
+    private String lastName;
+    private String phone;
+    private String position;
+    private String department;
+    private String bio;
+    private String language = "cs";
+    private String timezone = "Europe/Prague";
+    private String theme = "light";
+    
+    // Notification preferences
+    private Boolean emailNotifications = true;
+    private Boolean pushNotifications = true;
+    private Boolean weeklyReports = false;
 }

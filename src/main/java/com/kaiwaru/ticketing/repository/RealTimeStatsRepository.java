@@ -3,9 +3,11 @@ package com.kaiwaru.ticketing.repository;
 import com.kaiwaru.ticketing.model.Event;
 import com.kaiwaru.ticketing.model.RealTimeStats;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -30,6 +32,6 @@ public interface RealTimeStatsRepository extends JpaRepository<RealTimeStats, Lo
     
     Optional<RealTimeStats> findTopByOrderByTimestampDesc();
     
-    @Query("DELETE FROM RealTimeStats rts WHERE rts.timestamp < :before")
-    void deleteOldStats(@Param("before") LocalDateTime before);
+    // Use JPA method name for delete operation
+    void deleteByTimestampBefore(LocalDateTime before);
 }

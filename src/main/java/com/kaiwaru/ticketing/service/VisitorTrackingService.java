@@ -4,6 +4,7 @@ import com.kaiwaru.ticketing.model.Event;
 import com.kaiwaru.ticketing.model.Auth.User;
 import com.kaiwaru.ticketing.model.VisitorSession;
 import com.kaiwaru.ticketing.repository.VisitorSessionRepository;
+import com.kaiwaru.ticketing.service.CurrencyFormatService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +23,9 @@ public class VisitorTrackingService {
 
     @Autowired
     private VisitorSessionRepository visitorSessionRepository;
+    
+    @Autowired
+    private CurrencyFormatService currencyFormatService;
 
     @Autowired
     private IpGeolocationBatchService ipGeolocationBatchService;
@@ -85,8 +89,8 @@ public class VisitorTrackingService {
                 session.setTicketsPurchased(ticketsPurchased);
                 session.setRevenueGenerated(revenue);
                 visitorSessionRepository.save(session);
-                logger.info("Recorded conversion for session {}: {} tickets, {} CZK", 
-                    sessionId, ticketsPurchased, revenue);
+                logger.info("Recorded conversion for session {}: {} tickets, {} {}", 
+                    sessionId, ticketsPurchased, revenue, currencyFormatService.getCurrencyCode());
             });
         } catch (Exception e) {
             logger.error("Error recording conversion for session {}: {}", sessionId, e.getMessage(), e);

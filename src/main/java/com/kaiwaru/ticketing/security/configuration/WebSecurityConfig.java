@@ -14,7 +14,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
 import com.kaiwaru.ticketing.security.AuthEntryPointJwt;
 import com.kaiwaru.ticketing.security.AuthTokenFilter;
 import com.kaiwaru.ticketing.security.UserDetailsServiceImpl;
@@ -63,6 +62,8 @@ public class WebSecurityConfig {
                 .requestMatchers("/auth/**").permitAll()
                 .requestMatchers("/invite/validate").permitAll()
                 .requestMatchers("/tickets/purchase").permitAll()
+                .requestMatchers("/public/**").permitAll()
+                .requestMatchers("/embed/**").permitAll()
                 .anyRequest().authenticated()
             )
             .addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);

@@ -15,6 +15,11 @@ public class PurchaseTicketRequest {
     @Email
     private String customerEmail;
 
+    @NotNull
+    private Long ticketTypeId;
+
+    private Integer quantity = 1;
+
     // gettery/settery
     public Long getEventId() { return eventId; }
     public void setEventId(Long eventId) { this.eventId = eventId; }
@@ -24,4 +29,10 @@ public class PurchaseTicketRequest {
 
     public String getCustomerEmail() { return customerEmail; }
     public void setCustomerEmail(String customerEmail) { this.customerEmail = customerEmail; }
+    
+    public Long getTicketTypeId() { return ticketTypeId; }
+    public void setTicketTypeId(Long ticketTypeId) { this.ticketTypeId = ticketTypeId; }
+    
+    public Integer getQuantity() { return quantity; }
+    public void setQuantity(Integer quantity) { this.quantity = quantity; }
 }

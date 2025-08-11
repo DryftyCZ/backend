@@ -7,7 +7,6 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,6 +16,7 @@ import com.kaiwaru.ticketing.model.Ticket;
 import com.kaiwaru.ticketing.repository.RealTimeStatsRepository;
 import com.kaiwaru.ticketing.repository.TicketRepository;
 import com.kaiwaru.ticketing.repository.VisitorSessionRepository;
+import com.kaiwaru.ticketing.service.CurrencyFormatService;
 
 @Service
 public class RealTimeStatsService {
@@ -27,13 +27,15 @@ public class RealTimeStatsService {
 
     @Autowired
     private VisitorSessionRepository visitorSessionRepository;
+    
+    @Autowired
+    private CurrencyFormatService currencyFormatService;
 
     @Autowired
     private TicketRepository ticketRepository;
 
-    @Scheduled(fixedRate = 60000) // Run every minute
     @Transactional
-    public void generateRealTimeStats() {
+    public RealTimeStats generateRealTimeStats() {
         try {
             LocalDateTime now = LocalDateTime.now();
             LocalDateTime oneMinuteAgo = now.minusMinutes(1);
@@ -95,19 +97,24 @@ public class RealTimeStatsService {
 
             realTimeStatsRepository.save(globalStats);
             
-            logger.info("Generated real-time stats: {} active visitors, {} sales/min, {} CZK/min", 
-                activeVisitors, salesLastMinute, revenueLastMinute);
+            logger.debug("Generated real-time stats: {} active visitors, {} sales/min, {} {}/min", 
+                activeVisitors, salesLastMinute, revenueLastMinute, currencyFormatService.getCurrencyCode());
 
             // Clean up old stats (keep last 24 hours)
             LocalDateTime cleanupBefore = now.minusHours(24);
-            realTimeStatsRepository.deleteOldStats(cleanupBefore);
+            realTimeStatsRepository.deleteByTimestampBefore(cleanupBefore);
 
+            return globalStats;
         } catch (Exception e) {
             logger.error("Error generating real-time stats: {}", e.getMessage(), e);
+            return null;
         }
     }
 
     public List<RealTimeStats> getRecentStats(int limit) {
+        // Ensure we have fresh stats first
+        getLatestStats();
+        
         List<RealTimeStats> stats = realTimeStatsRepository.findAllOrderByTimestampDesc();
         return stats.size() > limit ? stats.subList(0, limit) : stats;
     }
@@ -118,7 +125,15 @@ public class RealTimeStatsService {
     }
 
     public RealTimeStats getLatestStats() {
-        return realTimeStatsRepository.findTopByOrderByTimestampDesc().orElse(null);
+        // Generate fresh stats when requested (only when real-time tab is accessed)
+        RealTimeStats latestFromDb = realTimeStatsRepository.findTopByOrderByTimestampDesc().orElse(null);
+        
+        // If no stats or stats are older than 2 minutes, generate fresh ones
+        if (latestFromDb == null || latestFromDb.getTimestamp().isBefore(LocalDateTime.now().minusMinutes(2))) {
+            return generateRealTimeStats();
+        }
+        
+        return latestFromDb;
     }
 
     public RealTimeStats getLatestStatsForEvent(Event event) {

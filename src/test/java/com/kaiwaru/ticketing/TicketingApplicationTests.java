@@ -2,12 +2,12 @@ package com.kaiwaru.ticketing;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 @SpringBootTest
 class TicketingApplicationTests {
-	@MockitoBean
+	@MockBean
     private JavaMailSender mailSender;
 
 	@Test

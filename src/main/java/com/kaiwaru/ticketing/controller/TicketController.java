@@ -20,8 +20,10 @@ import com.kaiwaru.ticketing.dto.GenerateTicketsRequest;
 import com.kaiwaru.ticketing.dto.PurchaseTicketRequest;
 import com.kaiwaru.ticketing.model.Event;
 import com.kaiwaru.ticketing.model.Ticket;
+import com.kaiwaru.ticketing.model.TicketType;
 import com.kaiwaru.ticketing.repository.EventRepository;
 import com.kaiwaru.ticketing.repository.TicketRepository;
+import com.kaiwaru.ticketing.repository.TicketTypeRepository;
 import com.kaiwaru.ticketing.service.TicketService;
 import com.kaiwaru.ticketing.service.EventService;
 import com.kaiwaru.ticketing.model.Auth.User;
@@ -113,16 +115,33 @@ public class TicketController {
     @PostMapping("/purchase")
     public ResponseEntity<?> purchaseTicket(@RequestBody @Valid PurchaseTicketRequest request, HttpServletRequest httpRequest) {
         try {
+            // Validate event exists
             Event event = eventRepository.findById(request.getEventId())
                     .orElseThrow(() -> new IllegalArgumentException(
                             "Event s ID " + request.getEventId() + " nebyl nalezen"));
 
-            // Use the new overloaded method that handles visitor tracking
-            Ticket ticket = ticketService.purchaseTicket(event, request.getCustomerName(), request.getCustomerEmail(), httpRequest);
+            // Get current user if authenticated, otherwise create a guest user
+            User customer = null;
+            try {
+                customer = getCurrentUser();
+            } catch (Exception e) {
+                // For public purchases, customer can be null
+            }
+
+            // Use the new method that supports ticket types
+            List<Ticket> tickets = ticketService.purchaseTicketsWithType(
+                    request.getTicketTypeId(),
+                    request.getCustomerName(),
+                    request.getCustomerEmail(),
+                    request.getQuantity(),
+                    httpRequest,
+                    customer
+            );
 
             return ResponseEntity.ok(Map.of(
-                "message", "Vstupenka byla úspěšně zakoupena",
-                "ticket", ticket
+                "message", "Vstupenky byly úspěšně zakoupeny",
+                "tickets", tickets,
+                "totalTickets", tickets.size()
             ));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
